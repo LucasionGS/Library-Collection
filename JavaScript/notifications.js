@@ -37,14 +37,15 @@ function closeNotificationById(id)
 // Global close notification by specific Object function
 function closeNotificationByObject(object)
 {
-  try {
-    object.setAttribute("action", "close");
-    setTimeout(function () {
+  object.setAttribute("action", "close");
+  setTimeout(function () {
+    try {
       object.parentNode.removeChild(object);
-    }, 300);
-  } catch (e) {
-    console.log("No previous Instance object");
-  }
+    }
+    catch (e) {
+      console.log("No previous Instance object");
+    }
+  }, 300);
 }
 
 // Global Notification function
@@ -92,6 +93,11 @@ function notification(title, message, dieAfter)
     setTimeout(function () {
       closeNotificationByObject(mainDiv);
     }, dieAfter);
+  }
+
+  mainDiv.close = function () {
+    closeNotificationByObject(this);
+    return undefined;
   }
 
   // Return the object
