@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Notification Test</title>
+    <script src="./JavaScript/notificationsClass.js" charset="utf-8"></script>
+    <script type="text/javascript">
+    Notification.addStyle();
+      window.onkeydown = function (e) {
+        if (e.keyCode == 32) {
+          console.log("Space");
+          const div = document.createElement("div");
+          div.innerHTML = "lOL";
+          var n = new Notification("Title", [div, 100, "is this string?"], 5000);
+          console.log(n);
+        }
+      }
+    </script>
+  </head>
+  <body>
+
+  </body>
+</html>
