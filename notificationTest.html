@@ -5,7 +5,7 @@
     <title>Notification Test</title>
     <script src="./JavaScript/notificationsClass.js" charset="utf-8"></script>
     <script type="text/javascript">
-    Notification.addStyle();
+    Notification.addStyle({theme:"dark", transition:"easein"});
       window.onkeydown = function (e) {
         if (e.keyCode == 32) {
           console.log("Space");

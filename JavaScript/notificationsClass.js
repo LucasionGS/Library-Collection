@@ -2,7 +2,6 @@ class Notification {
   // Global Notification constructor
   constructor(title, message, dieAfter)
   {
-    console.log(typeof message);
     // Variable check
     if (!message) {
       message = "";
@@ -45,8 +44,8 @@ class Notification {
     button.onclick = function () {
       mainDiv.close();
     }
-    button_div.setAttribute("class", "NotificationButton");
-    button_div.setAttribute("id", "doneNotificationButton");
+    button_div.setAttribute("class", "_notificationButton");
+    button_div.setAttribute("id", "_doneNotificationButton");
     button_div_p.innerHTML = "Done";
 
     // Merging
@@ -80,7 +79,37 @@ class Notification {
   }
 
   // Adding Notification Styling to the document. Required for use.
-  static addStyle() {
+  static addStyle(options = {theme:"light"}) {
+    // Default style settings
+    const dVars = {
+      minWidth: "512px",
+      maxWidth: "768px",
+      minHeight: "128px",
+      textColor: "black",
+      backgroundColor: "white",
+      transition: "ease-out"
+    };
+    console.log(dVars);
+    // Filter options
+    if (typeof options == "object") {
+      if (options.theme == "dark") {
+        dVars.backgroundColor = "rgb(45, 45, 45)";
+        dVars.textColor = "white";
+      }
+      if (options.transition) {
+        if (options.transition.replace(/([\-\s]+)/g, "") == "easeinout") {
+        dVars.transition = "ease-in-out";
+        }
+        else if (options.transition.replace(/([\-\s]+)/g, "") == "easein") {
+          dVars.transition = "ease-in";
+        }
+        else if (options.transition.replace(/([\-\s]+)/g, "") == "easeout") {
+          dVars.transition = "ease-out";
+        }
+      }
+    }
+
+    // Create style object
     const style = document.createElement("style");
     style.setAttribute("id", "notificationStylingObject");
     style.innerHTML = `
@@ -89,18 +118,18 @@ class Notification {
         left: 50%;
         top: 0;
         transform:translate(-50%, -100%);
-        min-width: 512px;
-        max-width: 768px;
-        min-height: 128px;
+        min-width: ${dVars.minWidth};
+        max-width: ${dVars.maxWidth};
+        min-height: ${dVars.minHeight};
         margin: auto;
-        background: white;
+        background: ${dVars.backgroundColor};
         border-radius: 10px;
-        box-shadow: 5px 5px 5pxblack;
-        transition: all 0.3s ease-out;
+        box-shadow: 3px 3px 5px black;
+        transition: all 0.3s ${dVars.transition};
 
       }
       div._notification h1, div._notification p{
-        color:black;
+        color: ${dVars.textColor};
         text-align: center;
 
       }
@@ -121,7 +150,7 @@ class Notification {
         transform: translate(-50%,-100%);
 
       }
-      div.NotificationButton{
+      div._notificationButton{
         position: absolute;
         right: 0;
         width: 128px;
@@ -133,11 +162,11 @@ class Notification {
         transition: all 0.1s ease-in-out;
 
       }
-      div.NotificationButton:hover{
+      div._notificationButton:hover{
         cursor: pointer;
 
       }
-      div.NotificationButton p{
+      div._notificationButton p{
         user-select: none;
         margin: 0;
         text-align: center;
