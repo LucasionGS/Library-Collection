@@ -1,4 +1,6 @@
-class Notification {
+class Notif {
+  // Transition time
+  deltaMoveTime = 300;
   // Global Notification constructor
   constructor(title, message, dieAfter)
   {
@@ -70,7 +72,7 @@ class Notification {
     }
 
     mainDiv.close = function () {
-      Notification.closeByObject(this);
+      Notif.closeByObject(this);
       return undefined;
     }
 
@@ -78,24 +80,54 @@ class Notification {
     this.object = mainDiv;
   }
 
+  // Extra Initialize function for those who expect it instead of addStyle
+  static Initialize(options) {
+    if (options) {
+      // With Options
+      Notif.addStyle(options);
+    }
+    else {
+      // Without options: Using default.
+      Notif.addStyle();
+    }
+  }
+
   // Adding Notification Styling to the document. Required for use.
-  static addStyle(options = {theme:"light"}) {
+  // This is literally Initializing it
+  static addStyle(options = {}) {
     // Default style settings
     const dVars = {
+      top:"5%",
       minWidth: "512px",
       maxWidth: "768px",
       minHeight: "128px",
       textColor: "black",
       backgroundColor: "white",
-      transition: "ease-out"
+      transition: "ease-out",
     };
+    this.deltaMoveTime = 300;
     console.log(dVars);
     // Filter options
     if (typeof options == "object") {
-      if (options.theme == "dark") {
-        dVars.backgroundColor = "rgb(45, 45, 45)";
-        dVars.textColor = "white";
+      // Themes
+      if (options.theme) {
+        if (options.theme == "dark") {
+          dVars.backgroundColor = "rgb(45, 45, 45)";
+          dVars.textColor = "white";
+        }
       }
+
+      // Height the notifcation box goes down
+      if (options.top) {
+        if (options.top.match(/(\d+)%/g)) {
+          dVars.top = options.top.match(/(\d+)%/g)[0];
+        }
+        else if (options.top.match(/(\d+)/g)) {
+          dVars.top = options.top.match(/(\d+)/g)[0]+"px";
+        }
+      }
+
+      // Transition animation
       if (options.transition) {
         if (options.transition.replace(/([\-\s]+)/g, "") == "easeinout") {
         dVars.transition = "ease-in-out";
@@ -105,6 +137,13 @@ class Notification {
         }
         else if (options.transition.replace(/([\-\s]+)/g, "") == "easeout") {
           dVars.transition = "ease-out";
+        }
+      }
+
+      // Transition time
+      if (options.transitionTime) {
+        if (typeof options.transitionTime == "number") {
+          this.deltaMoveTime = options.transitionTime;
         }
       }
     }
@@ -125,7 +164,7 @@ class Notification {
         background: ${dVars.backgroundColor};
         border-radius: 10px;
         box-shadow: 3px 3px 5px black;
-        transition: all 0.3s ${dVars.transition};
+        transition: all ${this.deltaMoveTime/1000}s ${dVars.transition};
 
       }
       div._notification h1, div._notification p{
@@ -134,19 +173,20 @@ class Notification {
 
       }
       div._notification p.notifText{
+        padding: 5px;
         padding-bottom: 36px;
         white-space: pre-wrap;
 
       }
       div._notification[action="open"]{
         left: 50%;
-        top: 5%;
+        top: ${dVars.top};
         transform:translateX(-50%);
 
       }
       div._notification[action="close"]{
         left: 50%;
-        top: 0;
+        top: -32px;
         transform: translate(-50%,-100%);
 
       }
@@ -170,15 +210,21 @@ class Notification {
         user-select: none;
         margin: 0;
         text-align: center;
-        margin-left: 50%;
         color: white;
-        transform: translate(50%, 50%);
+        width: 100%;
+        transform: translateY(50%);
 
       }
     `;
     document.getElementsByTagName("html")[0].firstChild.appendChild(style);
   }
 
+
+  // Class function to close current object
+  close()
+  {
+    Notif.closeByObject(this.object);
+  }
   // Global close top notification function
   static closeNewest()
   {
@@ -189,7 +235,7 @@ class Notification {
       .parentNode.removeChild(
         document.getElementsByClassName("_notification")[id]
       );
-    }, 300);
+    }, this.deltaMoveTime);
   }
 
   // Global close notification by ID function
@@ -204,7 +250,7 @@ class Notification {
       .parentNode.removeChild(
         document.getElementsByClassName("_notification")[id]
       );
-    }, 300);
+    }, this.deltaMoveTime);
   }
 
   // Global close notification by specific Object function
@@ -215,9 +261,7 @@ class Notification {
       try {
         object.parentNode.removeChild(object);
       }
-      catch (e) {
-        console.log("No previous Instance object");
-      }
-    }, 300);
+      catch (e) {}
+    }, this.deltaMoveTime);
   }
 }
