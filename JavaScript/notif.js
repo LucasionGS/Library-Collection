@@ -106,7 +106,6 @@ class Notif {
       transition: "ease-out",
     };
     this.deltaMoveTime = 300;
-    console.log(dVars);
     // Filter options
     if (typeof options == "object") {
       // Themes
@@ -228,7 +227,7 @@ class Notif {
   // Global close top notification function
   static closeNewest()
   {
-    id = document.getElementsByClassName("_notification").length-1;
+    var id = document.getElementsByClassName("_notification").length-1;
     document.getElementsByClassName("_notification")[id].setAttribute("action", "close");
     setTimeout(function () {
       document.getElementsByClassName("_notification")[id]
