@@ -4,6 +4,10 @@ class Notif {
   // Global Notification constructor
   constructor(title, message, dieAfter)
   {
+    if (document.querySelector("#notificationStylingObject") == null) {
+      console.log("Styling not made, adding default.");
+      Notif.addStyle();
+    }
     // Variable check
     if (!message) {
       message = "";
@@ -71,6 +75,7 @@ class Notif {
       }, dieAfter);
     }
 
+    mainDiv.instance = this;
     mainDiv.close = function () {
       Notif.closeByObject(this);
       return undefined;
@@ -78,6 +83,8 @@ class Notif {
 
     // Return the object
     this.object = mainDiv;
+    this.titleObject = h1;
+    this.descriptionObject = p;
   }
 
   // Extra Initialize function for those who expect it instead of addStyle
