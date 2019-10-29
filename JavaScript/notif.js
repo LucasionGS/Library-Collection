@@ -54,6 +54,10 @@ class Notif {
     button_div.setAttribute("id", "_doneNotificationButton");
     button_div_p.innerHTML = "Done";
 
+    button_div.setText = function (text) {
+      button_div_p.innerHTML = text;
+    }
+
     // Merging
     mainDiv.appendChild(h1);
     mainDiv.appendChild(p);
