@@ -239,7 +239,7 @@ class Notif {
   // Global close top notification function
   static closeNewest()
   {
-    var id = document.getElementsByClassName("_notification").length-1;
+    var id = document.querySelectorAll("._notification[action='open']").length-1;
     document.getElementsByClassName("_notification")[id].setAttribute("action", "close");
     setTimeout(function () {
       document.getElementsByClassName("_notification")[id]
