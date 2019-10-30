@@ -92,6 +92,11 @@ class Notif {
     this.buttonObject = button_div;
   }
 
+  // Random method to return a random integer from min to max
+  static randomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) ) + min;
+  }
+
   // Extra Initialize function for those who expect it instead of addStyle
   static Initialize(options) {
     if (options) {
