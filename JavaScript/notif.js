@@ -20,6 +20,8 @@ class Notif {
     var button = document.createElement("a");
     var button_div = document.createElement("div");
     var button_div_p = document.createElement("p");
+    var button_divExit = document.createElement("div");
+    var button_divExit_p = document.createElement("p");
     // Settings
     mainDiv.setAttribute("class","_notification");
     h1.innerHTML = title;
@@ -50,9 +52,16 @@ class Notif {
     button.onclick = function () {
       mainDiv.close();
     }
+    button_divExit.onclick = function () {
+      mainDiv.close();
+    }
     button_div.setAttribute("class", "_notificationButton");
     button_div.setAttribute("id", "_doneNotificationButton");
     button_div_p.innerHTML = "Done";
+
+    button_divExit.setAttribute("class", "_notificationExitButton");
+    button_divExit.setAttribute("id", "_notificationExitButton");
+    button_divExit_p.innerHTML = "X";
 
     button_div.setText = function (text) {
       button_div_p.innerHTML = text;
@@ -61,6 +70,8 @@ class Notif {
     // Merging
     mainDiv.appendChild(h1);
     mainDiv.appendChild(p);
+    button_divExit.appendChild(button_divExit_p);
+    mainDiv.appendChild(button_divExit);
     // Add a button if dieAfter time hasn't been set. Button will close the notification
     if (!dieAfter) {
       button_div.appendChild(button_div_p);
@@ -216,11 +227,27 @@ class Notif {
         border-radius: 10px;
         overflow: hidden;
         transition: all 0.1s ease-in-out;
-
       }
-      div._notificationButton:hover{
-        cursor: pointer;
 
+      div._notificationExitButton{
+        position: absolute;
+        font-size: 28px;
+        top: 0;
+        right: 0;
+        width: 32px;
+        height: 32px;
+        background: red;
+        border-radius: 10px;
+        overflow: hidden;
+        transition: all 0.1s ease-in-out;
+      }
+
+      div._notificationExitButton p{
+        margin: 0;
+        padding: 0;
+      }
+      div._notificationButton:hover, div._notificationExitButton:hover{
+        cursor: pointer;
       }
       div._notificationButton p{
         user-select: none;
