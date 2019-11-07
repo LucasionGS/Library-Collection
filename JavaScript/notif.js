@@ -261,23 +261,29 @@ class Notif {
     document.getElementsByTagName("html")[0].firstChild.appendChild(style);
   }
 
+  makeUntouchable()
+  {
+    this.object.style.pointerEvents = "none";
+  }
 
   // Class function to close current object
   close()
   {
+    this.makeUntouchable();
     Notif.closeByObject(this.object);
   }
   // Global close top notification function
   static closeNewest()
   {
     var id = document.querySelectorAll("._notification[action='open']").length-1;
+    document.getElementsByClassName("_notification")[id].instance.makeUntouchable();
     document.getElementsByClassName("_notification")[id].setAttribute("action", "close");
     setTimeout(function () {
       document.getElementsByClassName("_notification")[id]
       .parentNode.removeChild(
         document.getElementsByClassName("_notification")[id]
-      );
-    }, this.deltaMoveTime);
+        );
+      }, this.deltaMoveTime);
   }
 
   // Global close notification by ID function
@@ -286,6 +292,7 @@ class Notif {
     if (!id) {
       id = document.getElementsByClassName("_notification").length-1;
     }
+    document.getElementsByClassName("_notification")[id].instance.makeUntouchable();;
     document.getElementsByClassName("_notification")[id].setAttribute("action", "close");
     setTimeout(function () {
       document.getElementsByClassName("_notification")[id]
@@ -305,5 +312,6 @@ class Notif {
       }
       catch (e) {}
     }, this.deltaMoveTime);
+    object.instance.makeUntouchable();
   }
 }
