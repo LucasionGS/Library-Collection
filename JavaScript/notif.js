@@ -48,8 +48,7 @@ class Notif {
     }
 
     p.setAttribute("class", "notifText");
-    // button.href = "#back";
-    button.onclick = function () {
+    button_div.onclick = function () {
       mainDiv.close();
     }
     button_divExit.onclick = function () {
