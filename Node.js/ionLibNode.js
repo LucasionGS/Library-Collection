@@ -6,17 +6,79 @@ class Download{
     }
     this.url = url;
     this.dest = dest;
-    this.downloadedData = 0;
+    this.DownloadedBytes = 0;
+    this.TotalByteSize = 0;
   }
 
-  OnData(data)
+  OnData(data){}
+
+  OnClose(){}
+
+  OnError(error)
   {
-    this.downloadedData += data.length;
+    console.error(error);
   }
 
-  OnEnd()
+  OnEnd(){}
+
+  DownloadedInBits()
   {
-    console.log("Download finished.");
+    var bytes = this.DownloadedBytes;
+    return bytes * 8;
+  }
+
+  DownloadedInKiloBytes()
+  {
+    var bytes = this.DownloadedBytes;
+    return bytes / 1024;
+  }
+
+  DownloadedInMegaBytes()
+  {
+    var bytes = this.DownloadedBytes;
+    return bytes / 1024 / 1024;
+  }
+
+  DownloadedInGigaBytes()
+  {
+    var bytes = this.DownloadedBytes;
+    return bytes / 1024 / 1024 / 1024;
+  }
+
+  DownloadedInAuto()
+  {
+    var bytes = this.DownloadedBytes;
+    if (bytes > 1073741824) {
+      return this.DownloadedInGigaBytes();
+    }
+    else if (bytes > 1048576) {
+      return this.DownloadedInMegaBytes();
+    }
+    else if (bytes > 1024) {
+      return this.DownloadedInKiloBytes();
+    }
+    else if (bytes < 8) {
+      return this.DownloadedInBits();
+    }
+    else{
+      return bytes;
+    }
+  }
+
+  DownloadPercent()
+  {
+    var bytes = this.DownloadedBytes;
+    return 100 * (bytes / this.TotalByteSize);
+  }
+
+  SetDownloadedBits(value)
+  {
+    this.DownloadedBytes = value;
+  }
+
+  AddDownloadedBits(value)
+  {
+    this.DownloadedBytes += value;
   }
 
   Start(url = this.url, dest = this.dest)
@@ -34,12 +96,21 @@ class Download{
     else {
       http = require("http");
     }
+    // this.functions local vars for http.get
+    var object = this;
     var OnData = this.OnData;
+    var OnClose = this.OnClose;
+    var OnError = this.OnError;
     var OnEnd = this.OnEnd;
     http.get(url, function(res){
+      object.TotalByteSize = +res.headers["content-length"];
       console.log("Downloading...");
-      var downloadedData = 0;
-      res.on("data", OnData);
+      res.on("data", function(data){
+        object.AddDownloadedBits(data.length)
+        OnData(data);
+      });
+      res.on("close", OnClose);
+      res.on("error", OnError);
       res.on("end", OnEnd);
       if (dest) {
         try {
@@ -55,10 +126,14 @@ class Download{
   }
 }
 
-var object = new Download("https://lucasion.xyz/dln//mygames/Spike%20Escape%205/Spike%20Escape%205%201.3.exe", "./Game.exe");
+var object = new Download("https://lucasion.xyz/dln/mygames/Spike%20Escape%205/Spike%20Escape%205%201.3.exe", "./Game.exe");
 object.OnEnd = function()
 {
   console.log("Download is le done");
+}
+object.OnData = function(data)
+{
+  console.log(object.DownloadPercent()+"%");
 }
 object.Start();
 
