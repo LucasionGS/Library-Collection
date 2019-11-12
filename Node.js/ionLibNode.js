@@ -74,11 +74,13 @@ class Download{
   SetDownloadedBits(value)
   {
     this.DownloadedBytes = value;
+    return this;
   }
 
   AddDownloadedBits(value)
   {
     this.DownloadedBytes += value;
+    return this;
   }
 
   Start(url = this.url, dest = this.dest)
@@ -123,21 +125,9 @@ class Download{
         console.log("No destination specified.");
       }
     });
+    return this;
   }
 }
 
-var object = new Download("https://lucasion.xyz/dln/mygames/Spike%20Escape%205/Spike%20Escape%205%201.3.exe", "./Game.exe");
-object.OnEnd = function()
-{
-  console.log("Download is le done");
-}
-object.OnData = function(data)
-{
-  console.log(object.DownloadPercent()+"%");
-}
-object.Start();
-
-
-
 // Exports
-exports.download = Download;
+exports.Download = Download;
