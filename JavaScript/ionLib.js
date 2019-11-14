@@ -1,5 +1,3 @@
-exports.Hex = Hex;
-
 class Hex{
   static HexToInt(hex)
   {
@@ -64,4 +62,38 @@ class Hex{
   // {
   //   Do stuff
   // }
+}
+
+class IonJSON
+{
+  /**
+   * 
+   * @param {{}} json JSON Object to sort
+   * @param {Function} sortFunction 
+   */
+  static sortJSON(json, sortFunction)
+  {
+    if (!sortFunction) {
+
+      return console.error("Sorting function needs to be specified!\n");
+    }
+    var jsonArray = [];
+    var jsonKeys = Object.keys(json);
+    for (const i in jsonKeys) {
+      if (jsonKeys.hasOwnProperty(i)) {
+        var keyName = jsonKeys[i];
+        jsonArray.push([keyName, json[keyName]])
+      }
+    }
+    jsonArray = jsonArray.sort((a, b) => {
+      return sortFunction(a[1], b[1]);
+    });
+
+    var newJson = {};
+    for (let i = 0; i < jsonArray.length; i++) {
+      newJson[jsonArray[i][0]] = jsonArray[i][1];
+    }
+
+    return newJson;
+  }
 }

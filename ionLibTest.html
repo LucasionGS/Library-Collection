@@ -8,6 +8,34 @@
       window.onload = function()
       {
         document.querySelector("#result").innerHTML = "Result: "+Hex.HexToInt("0022FF");
+        var json = {
+          "key1": {
+            "number": 1,
+            "array": {
+              "number": 2,
+              "anotherNumber": 15
+            }
+          },
+          "key2": {
+            "number": 3,
+            "array": {
+              "number": 3,
+              "anotherNumber": 102
+            }
+          },
+          "key3": {
+            "number": 2,
+            "array": {
+              "number": 1,
+              "anotherNumber": 100
+            }
+          }
+        };
+
+        console.log(IonJSON.SortJSON(json, function(a, b)
+        {
+          return b.array.anotherNumber - a.array.anotherNumber;
+        }));
       }
     </script>
   </head>
