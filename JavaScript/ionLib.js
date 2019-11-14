@@ -71,7 +71,7 @@ class IonJSON
    * @param {{}} json JSON Object to sort
    * @param {Function} sortFunction 
    */
-  static sortJSON(json, sortFunction)
+  static SortJSON(json, sortFunction)
   {
     if (!sortFunction) {
 
